@@ -1,0 +1,23 @@
+# dbt profiles for Foresight.
+#
+# `local` (default): DuckDB — fast, zero-infra verification of model logic in CI
+#   and dev. Reads the bronze seed as a stand-in for the Iceberg bronze table.
+# `databricks`: production target — runs the identical models on the Spark SQL
+#   warehouse against the real Iceberg lakehouse. JSON extraction is abstracted
+#   via the `json_get` macro (adapter dispatch), so the model SQL is unchanged.
+foresight:
+  target: local
+  outputs:
+    local:
+      type: duckdb
+      path: "{{ env_var('DBT_DUCKDB_PATH', 'target/foresight.duckdb') }}"
+      threads: 4
+
+    databricks:
+      type: databricks
+      catalog: "{{ env_var('DATABRICKS_CATALOG', 'foresight') }}"
+      schema: analytics
+      host: "{{ env_var('DATABRICKS_HOST', '') }}"
+      http_path: "{{ env_var('DATABRICKS_HTTP_PATH', '') }}"
+      token: "{{ env_var('DATABRICKS_TOKEN', '') }}"
+      threads: 4

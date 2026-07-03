@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: fct_kpi_timeseries
+    description: Per-tenant, per-day KPI time series (gold).
+    columns:
+      - name: tenant_id
+        data_tests: [not_null]
+      - name: metric_date
+        data_tests: [not_null]
+      - name: mrr
+        description: Running monthly recurring revenue in dollars.
+        data_tests: [not_null]
+      - name: active_subscriptions
+        data_tests: [not_null]

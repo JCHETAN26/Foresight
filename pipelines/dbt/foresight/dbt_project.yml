@@ -1,0 +1,40 @@
+name: foresight
+version: "0.1.0"
+config-version: 2
+
+profile: foresight
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  foresight:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: view
+      +schema: intermediate
+    marts:
+      +materialized: table
+      +schema: marts
+
+seeds:
+  foresight:
+    bronze_stripe_events:
+      +schema: lakehouse
+      +column_types:
+        event_id: varchar
+        source: varchar
+        tenant_id: varchar
+        event_type: varchar
+        livemode: boolean
+        created_epoch: bigint
+        api_version: varchar
+        payload: varchar
+        ingested_at: timestamp

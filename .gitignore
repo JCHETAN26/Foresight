@@ -39,3 +39,18 @@ dist/
 *.pem
 *.key
 secrets/
+
+# dbt
+target/
+dbt_packages/
+logs/
+*.duckdb
+*.duckdb.wal
+
+# Spark
+spark-warehouse/
+metastore_db/
+derby.log
+
+# dbt local user file
+.user.yml

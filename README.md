@@ -12,8 +12,8 @@ See [`build-plan.md`](build-plan.md) for the full architecture and milestones.
 
 | Milestone | Status |
 |---|---|
-| **M0 — Foundation** | 🟡 In progress |
-| M1 — Data Pipeline | ⚪ Not started |
+| **M0 — Foundation** | 🟢 Ingestion + infra scaffolded, CI green |
+| **M1 — Data Pipeline** | 🟡 Bronze ingest + dbt silver/gold done & tested |
 | M2 — ML Models | ⚪ Not started |
 | M3 — LangGraph Agent | ⚪ Not started |
 | M4 — Backend + Auth | ⚪ Not started |
@@ -27,6 +27,9 @@ See [`build-plan.md`](build-plan.md) for the full architecture and milestones.
 ├── docker-compose.yml        # local stack: Kafka, Postgres, Redis, ingestion
 ├── services/
 │   └── ingestion/            # FastAPI: Stripe webhook → Kafka (per-tenant topics)
+├── pipelines/
+│   ├── streaming/            # Spark Structured Streaming: Kafka → Iceberg bronze
+│   └── dbt/foresight/        # dbt: bronze → silver → gold KPI models (DuckDB/Databricks)
 ├── infra/terraform/          # Azure IaC: Event Hubs, Databricks, ADLS, AKS, OpenAI
 └── .github/workflows/ci.yml  # lint · type-check · test · terraform validate · docker build
 ```

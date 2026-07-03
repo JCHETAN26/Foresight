@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: stg_stripe_events
+    description: Typed, deduplicated, normalized Stripe events (silver).
+    columns:
+      - name: event_id
+        description: Unique per delivered event; webhook re-deliveries deduped.
+        data_tests:
+          - not_null
+          - unique
+      - name: tenant_id
+        data_tests: [not_null]
+      - name: event_type
+        data_tests: [not_null]
+      - name: event_ts
+        data_tests: [not_null]
+      - name: amount_cents
+        description: Monetary amount in cents (integer), parsed from payload.
