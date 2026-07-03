@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(terraform version *)",
+      "Bash(docker compose *)",
+      "Bash(curl -s localhost:8000/health)",
+      "Bash(docker exec foresight-kafka *)",
+      "Bash(gh auth *)",
+      "Bash(git ls-remote *)",
+      "Bash(git add *)",
+      "Bash(git commit -q -m ' *)",
+      "Bash(git push *)",
+      "Bash(git checkout *)"
+    ]
+  }
+}
