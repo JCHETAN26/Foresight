@@ -55,6 +55,57 @@ jobs:
       - name: Validate
         run: terraform validate
 
+  dbt:
+    name: dbt — build & test (DuckDB)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pipelines/dbt/foresight
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dbt
+        run: pip install "dbt-duckdb>=1.8,<2.0"
+
+      - name: Seed (load bronze fixture)
+        run: dbt seed --profiles-dir .
+
+      - name: Build models + run all tests
+        run: dbt build --profiles-dir .
+
+  streaming:
+    name: Streaming — bronze transform tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pipelines/streaming
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: Test (pytest)
+        run: pytest -q
+
   docker:
     name: Docker — build ingestion image
     runs-on: ubuntu-latest

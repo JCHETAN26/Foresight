@@ -1,0 +1,27 @@
+version: 2
+
+sources:
+  - name: lakehouse
+    description: >
+      Iceberg lakehouse on ADLS Gen2. In production the bronze table is written
+      by the Spark Structured Streaming job; locally it is the seeded
+      `bronze_stripe_events` table (identical schema).
+    schema: lakehouse
+    tables:
+      - name: bronze_stripe_events
+        description: Raw Stripe events as landed by ingestion — immutable, append-only.
+        columns:
+          - name: event_id
+            description: Stripe event id (evt_...). Unique per delivered event.
+            data_tests:
+              - not_null
+          - name: tenant_id
+            description: Foresight tenant (Stripe Connect account id).
+            data_tests:
+              - not_null
+          - name: event_type
+            description: Stripe event type, e.g. invoice.paid.
+            data_tests:
+              - not_null
+          - name: payload
+            description: Raw Stripe data.object serialized as a JSON string.
