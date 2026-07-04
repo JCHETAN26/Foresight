@@ -199,7 +199,17 @@ M2 ML Models:           [~] Detection done — LSTM-AE + IsolationForest ensembl
                             metrics under-determine anomaly type (needs M3 RAG
                             context). Remaining: BentoML/SageMaker serving,
                             Evidently drift, then M3 agent for grounded explanation.
-M3 LangGraph Agent:     [ ] Not started
+M3 LangGraph Agent:     [~] Graph built (agent/) — 6-node LangGraph
+                            (detect→classify→retrieve→reason→evaluate→alert),
+                            freshness-aware hybrid RAG (Qdrant in-memory + BM25 +
+                            RRF + 15-min 3x boost), Claude reason node (Anthropic
+                            SDK, opus-4-8) with a deterministic stub for CI,
+                            numeric faithfulness gate + retry, human-in-the-loop
+                            withholding, Slack alert. 8 tests pass, runs E2E with
+                            stub. Honest note: freshness 3x can beat relevance;
+                            hashing embedder stands in for bge-small; LLM-judge
+                            faithfulness needs a key (not in CI). Remaining: real
+                            Claude run, LangSmith tracing, LlamaIndex ingestion.
 M4 Backend + Auth:      [ ] Not started
 M5 Frontend:            [ ] Not started
 M6 Beta + Benchmarks:   [ ] Not started
