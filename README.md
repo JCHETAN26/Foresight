@@ -33,7 +33,8 @@ See [`build-plan.md`](build-plan.md) for the full architecture and milestones.
 │   ├── quality/             # Great Expectations gates on bronze + gold
 │   └── orchestration/       # Airflow DAG: dbt → quality → detection handoff
 ├── ml/
-│   └── detection/           # LSTM autoencoder + IsolationForest ensemble + benchmark
+│   ├── detection/           # LSTM autoencoder + IsolationForest ensemble + benchmark
+│   └── classification/      # LoRA-fine-tuned T5-small anomaly-type classifier
 ├── infra/terraform/          # Azure IaC: Event Hubs, Databricks, ADLS, AKS, OpenAI
 └── .github/workflows/ci.yml  # lint · type-check · test · terraform validate · docker build
 ```
