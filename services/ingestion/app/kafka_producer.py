@@ -14,6 +14,7 @@ from aiokafka import AIOKafkaProducer
 
 from app.config import settings
 from app.logging import get_logger
+from app.metrics import EVENTS_PUBLISHED, PUBLISH_DURATION, PUBLISH_ERRORS
 
 log = get_logger(__name__)
 
@@ -50,7 +51,15 @@ class KafkaEventProducer:
             raise RuntimeError("producer not started")
         payload = json.dumps(value, separators=(",", ":")).encode("utf-8")
         key_bytes = key.encode("utf-8") if key else None
-        await self._producer.send_and_wait(topic, value=payload, key=key_bytes)
+        source = value.get("source", "unknown")
+        try:
+            with PUBLISH_DURATION.labels(source).time():
+                await self._producer.send_and_wait(topic, value=payload, key=key_bytes)
+        except Exception:
+            PUBLISH_ERRORS.labels(source).inc()
+            log.error("event_publish_failed", topic=topic, key=key)
+            raise
+        EVENTS_PUBLISHED.labels(source).inc()
         log.info("event_published", topic=topic, key=key, event_id=value.get("id"))
 
 

@@ -1,0 +1,9 @@
+# Airflow is pinned and installed with its official constraints file to keep a
+# reproducible dependency set. Install into an isolated environment:
+#
+#   pip install "apache-airflow==2.9.3" pytest \
+#     --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.9.3/constraints-3.11.txt"
+#
+# The Airflow worker image additionally installs foresight-quality and dbt-*
+# so the tasks can run; the scheduler only needs Airflow core to parse the DAG.
+apache-airflow==2.9.3

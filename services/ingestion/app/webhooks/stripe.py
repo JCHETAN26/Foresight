@@ -21,6 +21,7 @@ from fastapi import APIRouter, Header, HTTPException, Request, status
 from app.config import settings
 from app.kafka_producer import producer
 from app.logging import get_logger
+from app.metrics import EVENTS_RECEIVED
 
 log = get_logger(__name__)
 
@@ -64,10 +65,12 @@ async def stripe_webhook(
         )
     except ValueError:
         # Malformed payload — not JSON or not a Stripe event shape.
+        EVENTS_RECEIVED.labels("stripe", "rejected_payload").inc()
         log.warning("stripe_webhook_invalid_payload")
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "invalid payload") from None
     except stripe.SignatureVerificationError:
         # Bad or missing signature — reject; do not enqueue.
+        EVENTS_RECEIVED.labels("stripe", "rejected_signature").inc()
         log.warning("stripe_webhook_bad_signature")
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "signature verification failed") from None
 
@@ -81,4 +84,5 @@ async def stripe_webhook(
 
     await producer.send(topic=topic, key=tenant_id, value=envelope)
 
+    EVENTS_RECEIVED.labels("stripe", "accepted").inc()
     return {"status": "accepted", "event_id": event_dict["id"]}

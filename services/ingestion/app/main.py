@@ -5,7 +5,8 @@ from __future__ import annotations
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
+from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
 from app import __version__
 from app.kafka_producer import producer
@@ -40,3 +41,9 @@ app.include_router(stripe_router)
 async def health() -> dict[str, str]:
     """Liveness probe."""
     return {"status": "ok", "version": __version__}
+
+
+@app.get("/metrics", tags=["ops"])
+async def metrics() -> Response:
+    """Prometheus scrape endpoint."""
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)

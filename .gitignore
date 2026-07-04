@@ -54,3 +54,7 @@ derby.log
 
 # dbt local user file
 .user.yml
+
+# Airflow isolated venv
+pipelines/.venv-airflow/
+.venv-*/

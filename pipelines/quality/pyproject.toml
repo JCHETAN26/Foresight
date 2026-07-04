@@ -1,0 +1,33 @@
+[project]
+name = "foresight-quality"
+version = "0.1.0"
+description = "Foresight data-quality gates (Great Expectations)"
+requires-python = ">=3.11"
+dependencies = [
+    "great_expectations>=0.18,<0.19",
+    "duckdb>=1.0",
+    "pandas>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2",
+    "ruff>=0.5",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["foresight_quality"]
