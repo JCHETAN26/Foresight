@@ -58,3 +58,9 @@ derby.log
 # Airflow isolated venv
 pipelines/.venv-airflow/
 .venv-*/
+
+# ML training artifacts
+wandb/
+outputs/
+*.pt
+*.ckpt
