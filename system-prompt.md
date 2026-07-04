@@ -193,8 +193,12 @@ M2 ML Models:           [~] Detection done — LSTM-AE + IsolationForest ensembl
                             beats T5 (acc 0.835 vs 0.747, macro-F1 tied) — task is
                             lexically separable, fine-tuned LLM not justified; ship
                             TF-IDF. "T5 beats GPT-4o by 18%" not supported.
-                            Remaining: wire detection to real gold KPIs, BentoML/
-                            SageMaker serving, Evidently drift monitoring.
+                            INTEGRATION done (ml/anomaly): gold KPIs → detect →
+                            attribute → describe → classify → AnomalyRecord.
+                            Gold adapter verified vs real dbt gold. Honest finding:
+                            metrics under-determine anomaly type (needs M3 RAG
+                            context). Remaining: BentoML/SageMaker serving,
+                            Evidently drift, then M3 agent for grounded explanation.
 M3 LangGraph Agent:     [ ] Not started
 M4 Backend + Auth:      [ ] Not started
 M5 Frontend:            [ ] Not started
