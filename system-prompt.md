@@ -187,8 +187,14 @@ M2 ML Models:           [~] Detection done — LSTM-AE + IsolationForest ensembl
                             is uniquely good at contextual anomalies (57% recall vs
                             ≤24% baselines), but absolute precision ~0.35 — the
                             "91% precision/87% recall" resume numbers are NOT
-                            supported by measurement and need revising. Remaining:
-                            LoRA-T5 classifier, BentoML/SageMaker, Evidently.
+                            supported by measurement and need revising.
+                            Classification done — LoRA T5-small vs TF-IDF baseline,
+                            template-holdout eval. HONEST RESULT: TF-IDF matches/
+                            beats T5 (acc 0.835 vs 0.747, macro-F1 tied) — task is
+                            lexically separable, fine-tuned LLM not justified; ship
+                            TF-IDF. "T5 beats GPT-4o by 18%" not supported.
+                            Remaining: wire detection to real gold KPIs, BentoML/
+                            SageMaker serving, Evidently drift monitoring.
 M3 LangGraph Agent:     [ ] Not started
 M4 Backend + Auth:      [ ] Not started
 M5 Frontend:            [ ] Not started
