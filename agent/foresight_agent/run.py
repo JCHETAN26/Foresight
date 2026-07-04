@@ -11,11 +11,31 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from pathlib import Path
 
 from foresight_agent.graph import build_graph
 from foresight_agent.knowledge import KNOWLEDGE
 from foresight_agent.llm import ClaudeGenerator, StubGenerator
 from foresight_agent.retrieval import HybridRetriever
+
+
+def _load_dotenv() -> None:
+    """Load KEY=VALUE lines from agent/.env (gitignored) into the environment.
+
+    The Anthropic SDK reads ANTHROPIC_API_KEY from the OS env, so this lets the
+    key live in a gitignored file instead of being exported by hand.
+    """
+    here = Path(__file__).resolve()
+    candidates = (here.parents[1] / ".env", here.parents[2] / ".env", Path.cwd() / ".env")
+    for candidate in candidates:
+        if not candidate.is_file():
+            continue
+        for line in candidate.read_text().splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
 
 SAMPLE = {
     "tenant_id": "acct_016",
@@ -37,6 +57,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--slack", action="store_true", help="Post to SLACK_WEBHOOK_URL if set.")
     args = parser.parse_args(argv)
 
+    _load_dotenv()
     use_claude = args.live or os.getenv("ANTHROPIC_API_KEY")
     generator = ClaudeGenerator() if use_claude else StubGenerator()
     retriever = HybridRetriever(KNOWLEDGE)

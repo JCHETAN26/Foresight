@@ -206,10 +206,14 @@ M3 LangGraph Agent:     [~] Graph built (agent/) — 6-node LangGraph
                             SDK, opus-4-8) with a deterministic stub for CI,
                             numeric faithfulness gate + retry, human-in-the-loop
                             withholding, Slack alert. 8 tests pass, runs E2E with
-                            stub. Honest note: freshness 3x can beat relevance;
-                            hashing embedder stands in for bge-small; LLM-judge
-                            faithfulness needs a key (not in CI). Remaining: real
-                            Claude run, LangSmith tracing, LlamaIndex ingestion.
+                            stub. LIVE Claude (opus-4-8) run verified: produces a
+                            genuinely grounded explanation, retry loop pulls the
+                            payment runbook, faithfulness 1.0 → alert ready. Live
+                            run caught + fixed a faithfulness-gate bug (thousands
+                            separators misread "$9,000"). Honest note: freshness
+                            3x can beat relevance; hashing embedder stands in for
+                            bge-small; LLM-judge faithfulness needs a key (not in
+                            CI). Remaining: LangSmith tracing, LlamaIndex ingestion.
 M4 Backend + Auth:      [ ] Not started
 M5 Frontend:            [ ] Not started
 M6 Beta + Benchmarks:   [ ] Not started
