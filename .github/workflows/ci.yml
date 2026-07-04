@@ -56,7 +56,7 @@ jobs:
         run: terraform validate
 
   dbt:
-    name: dbt — build & test (DuckDB)
+    name: dbt + Great Expectations (DuckDB)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -69,14 +69,25 @@ jobs:
           python-version: "3.11"
           cache: pip
 
-      - name: Install dbt
-        run: pip install "dbt-duckdb>=1.8,<2.0"
+      - name: Install dbt + quality gates
+        run: |
+          pip install "dbt-duckdb>=1.8,<2.0"
+          pip install -e ../../quality[dev]
 
       - name: Seed (load bronze fixture)
         run: dbt seed --profiles-dir .
 
       - name: Build models + run all tests
         run: dbt build --profiles-dir .
+
+      - name: Lint quality (ruff)
+        run: ruff check ../../quality
+
+      - name: Great Expectations — suite unit tests
+        run: pytest ../../quality/tests -q
+
+      - name: Great Expectations — gate bronze + gold
+        run: python -m foresight_quality.run_quality --duckdb target/foresight.duckdb
 
   streaming:
     name: Streaming — bronze transform tests
@@ -105,6 +116,32 @@ jobs:
 
       - name: Test (pytest)
         run: pytest -q
+
+  airflow:
+    name: Airflow — DAG integrity
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pipelines/orchestration
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install Airflow (pinned + constraints)
+        run: |
+          pip install "apache-airflow==2.9.3" pytest \
+            --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.9.3/constraints-3.11.txt"
+          pip install ruff
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: DAG integrity tests
+        run: pytest tests -q
 
   docker:
     name: Docker — build ingestion image

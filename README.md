@@ -13,7 +13,7 @@ See [`build-plan.md`](build-plan.md) for the full architecture and milestones.
 | Milestone | Status |
 |---|---|
 | **M0 — Foundation** | 🟢 Ingestion + infra scaffolded, CI green |
-| **M1 — Data Pipeline** | 🟡 Bronze ingest + dbt silver/gold done & tested |
+| **M1 — Data Pipeline** | 🟡 Bronze ingest, dbt KPIs, GE gates, Airflow, Prometheus — all tested |
 | M2 — ML Models | ⚪ Not started |
 | M3 — LangGraph Agent | ⚪ Not started |
 | M4 — Backend + Auth | ⚪ Not started |
@@ -29,7 +29,9 @@ See [`build-plan.md`](build-plan.md) for the full architecture and milestones.
 │   └── ingestion/            # FastAPI: Stripe webhook → Kafka (per-tenant topics)
 ├── pipelines/
 │   ├── streaming/            # Spark Structured Streaming: Kafka → Iceberg bronze
-│   └── dbt/foresight/        # dbt: bronze → silver → gold KPI models (DuckDB/Databricks)
+│   ├── dbt/foresight/        # dbt: bronze → silver → gold KPI models (DuckDB/Databricks)
+│   ├── quality/             # Great Expectations gates on bronze + gold
+│   └── orchestration/       # Airflow DAG: dbt → quality → detection handoff
 ├── infra/terraform/          # Azure IaC: Event Hubs, Databricks, ADLS, AKS, OpenAI
 └── .github/workflows/ci.yml  # lint · type-check · test · terraform validate · docker build
 ```

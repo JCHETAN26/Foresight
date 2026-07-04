@@ -174,11 +174,12 @@ Track what's been built as you go. Update this section:
 M0 Foundation:          [~] In progress — ingestion (Stripe→Kafka) working E2E,
                             Docker Compose stack, Terraform skeleton, CI green.
                             Remaining: run terraform apply against Azure.
-M1 Data Pipeline:       [~] In progress — Spark bronze ingest (Kafka→Iceberg,
-                            transform unit-tested) + dbt silver/gold KPI models
-                            (MRR/churn/refund/conversion) verified on DuckDB with
-                            exact-value assertions. Remaining: Great Expectations,
-                            Airflow DAG, Prometheus pipeline metrics, live on Databricks.
+M1 Data Pipeline:       [~] Nearly done — Spark bronze ingest (Kafka→Iceberg,
+                            transform unit-tested), dbt silver/gold KPI models
+                            (exact-value assertions), Great Expectations gates on
+                            bronze+gold, Airflow DAG (dbt→quality→handoff, DagBag
+                            tested), Prometheus metrics on ingestion. All green in
+                            CI. Remaining only: run live on Databricks/Azure.
 M2 ML Models:           [ ] Not started
 M3 LangGraph Agent:     [ ] Not started
 M4 Backend + Auth:      [ ] Not started
