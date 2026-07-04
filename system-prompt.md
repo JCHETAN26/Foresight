@@ -180,7 +180,15 @@ M1 Data Pipeline:       [~] Nearly done — Spark bronze ingest (Kafka→Iceberg
                             bronze+gold, Airflow DAG (dbt→quality→handoff, DagBag
                             tested), Prometheus metrics on ingestion. All green in
                             CI. Remaining only: run live on Databricks/Azure.
-M2 ML Models:           [ ] Not started
+M2 ML Models:           [~] Detection done — LSTM-AE + IsolationForest ensemble,
+                            Optuna tuning, W&B (offline) tracking, SHAP attribution,
+                            benchmark vs IsolationForest/ARIMA/z-score on labeled
+                            synthetic data. HONEST RESULT: ensemble wins on F1 &
+                            is uniquely good at contextual anomalies (57% recall vs
+                            ≤24% baselines), but absolute precision ~0.35 — the
+                            "91% precision/87% recall" resume numbers are NOT
+                            supported by measurement and need revising. Remaining:
+                            LoRA-T5 classifier, BentoML/SageMaker, Evidently.
 M3 LangGraph Agent:     [ ] Not started
 M4 Backend + Auth:      [ ] Not started
 M5 Frontend:            [ ] Not started
