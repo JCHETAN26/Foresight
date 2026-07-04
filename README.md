@@ -15,7 +15,7 @@ See [`build-plan.md`](build-plan.md) for the full architecture and milestones.
 | **M0 — Foundation** | 🟢 Ingestion + infra scaffolded, CI green |
 | **M1 — Data Pipeline** | 🟡 Bronze ingest, dbt KPIs, GE gates, Airflow, Prometheus — all tested |
 | **M2 — ML Models** | 🟢 Detection + classification benchmarked; wired gold KPIs → detect → describe → classify |
-| M3 — LangGraph Agent | ⚪ Not started |
+| **M3 — LangGraph Agent** | 🟡 6-node graph, freshness-aware RAG, faithfulness gate, Slack alert — tested |
 | M4 — Backend + Auth | ⚪ Not started |
 | M5 — Frontend | ⚪ Not started |
 | M6 — Beta + Benchmarks | ⚪ Not started |
@@ -36,6 +36,7 @@ See [`build-plan.md`](build-plan.md) for the full architecture and milestones.
 │   ├── detection/           # LSTM autoencoder + IsolationForest ensemble + benchmark
 │   ├── classification/      # LoRA-fine-tuned T5-small anomaly-type classifier
 │   └── anomaly/             # integration: gold KPIs → detect → describe → classify
+├── agent/                   # LangGraph: detect→classify→retrieve→reason→evaluate→alert
 ├── infra/terraform/          # Azure IaC: Event Hubs, Databricks, ADLS, AKS, OpenAI
 └── .github/workflows/ci.yml  # lint · type-check · test · terraform validate · docker build
 ```
