@@ -12,7 +12,9 @@ from __future__ import annotations
 import re
 from typing import Any
 
-_NUM = re.compile(r"-?\d+(?:\.\d+)?")
+# Matches numbers with optional thousands separators (e.g. "9,000") so a
+# grounded value like $9,000 isn't misread as "9" and "000".
+_NUM = re.compile(r"-?\d[\d,]*(?:\.\d+)?")
 FAITHFULNESS_THRESHOLD = 0.85
 
 
@@ -20,7 +22,7 @@ def _numbers(text: str) -> list[float]:
     out = []
     for tok in _NUM.findall(text):
         try:
-            out.append(float(tok))
+            out.append(float(tok.replace(",", "")))
         except ValueError:
             pass
     return out
