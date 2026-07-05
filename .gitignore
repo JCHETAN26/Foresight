@@ -64,3 +64,4 @@ wandb/
 outputs/
 *.pt
 *.ckpt
+.gstack/

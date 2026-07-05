@@ -17,7 +17,7 @@ See [`build-plan.md`](build-plan.md) for the full architecture and milestones.
 | **M2 — ML Models** | 🟢 Detection + classification benchmarked; wired gold KPIs → detect → describe → classify |
 | **M3 — LangGraph Agent** | 🟡 6-node graph, freshness-aware RAG, faithfulness gate, Slack alert — tested |
 | M4 — Backend + Auth | ⚪ Not started |
-| M5 — Frontend | ⚪ Not started |
+| **M5 — Frontend** | 🟡 Next.js 15 dashboard: anomaly timeline + real Claude explanations |
 | M6 — Beta + Benchmarks | ⚪ Not started |
 
 ## Repository layout
@@ -37,6 +37,7 @@ See [`build-plan.md`](build-plan.md) for the full architecture and milestones.
 │   ├── classification/      # LoRA-fine-tuned T5-small anomaly-type classifier
 │   └── anomaly/             # integration: gold KPIs → detect → describe → classify
 ├── agent/                   # LangGraph: detect→classify→retrieve→reason→evaluate→alert
+├── frontend/                # Next.js 15 dashboard: anomaly timeline + AI explanations
 ├── infra/terraform/          # Azure IaC: Event Hubs, Databricks, ADLS, AKS, OpenAI
 └── .github/workflows/ci.yml  # lint · type-check · test · terraform validate · docker build
 ```

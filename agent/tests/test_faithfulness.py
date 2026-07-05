@@ -25,3 +25,10 @@ def test_grounded_numbers_pass() -> None:
 def test_fabricated_number_lowers_score() -> None:
     exp = "Refund rate hit 0.42 and 317 customers churned."  # neither is in source
     assert faithfulness_score(exp, ANOMALY, RETRIEVED) < 0.85
+
+
+def test_unicode_minus_and_thousands_separator() -> None:
+    # Models emit U+2212 and comma-grouped numbers; both must ground.
+    anomaly = {"top_contributors": [["mrr", -6.1]], "metrics": {"mrr": 28800.0}}
+    exp = "MRR fell −6.10sd to $28,800."
+    assert faithfulness_score(exp, anomaly, []) == 1.0

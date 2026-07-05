@@ -215,7 +215,14 @@ M3 LangGraph Agent:     [~] Graph built (agent/) — 6-node LangGraph
                             bge-small; LLM-judge faithfulness needs a key (not in
                             CI). Remaining: LangSmith tracing, LlamaIndex ingestion.
 M4 Backend + Auth:      [ ] Not started
-M5 Frontend:            [ ] Not started
+M5 Frontend:            [~] Next.js 15 dashboard (frontend/) — anomaly timeline
+                            with real Claude explanations, stat tiles, per-anomaly
+                            drivers + faithfulness + status badges (ready / held
+                            for review / held low-faithfulness), theme-aware +
+                            responsive. Demo bundle generated from the REAL agent
+                            (live Claude). Prod build static + Vitest tests green,
+                            verified via screenshot. Remaining: WebSocket live
+                            stream, AI chat, connector OAuth (need M4 backend).
 M6 Beta + Benchmarks:   [ ] Not started
 ```
 
