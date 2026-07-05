@@ -19,6 +19,9 @@ FAITHFULNESS_THRESHOLD = 0.85
 
 
 def _numbers(text: str) -> list[float]:
+    # Normalize the Unicode minus sign (U+2212) that models often emit, so a
+    # signed driver like "−6.10sd" matches the stored value -6.1.
+    text = text.replace("−", "-")
     out = []
     for tok in _NUM.findall(text):
         try:

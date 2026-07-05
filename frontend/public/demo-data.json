@@ -1,0 +1,125 @@
+{
+  "generated_with": "Claude Opus 4.8",
+  "anomalies": [
+    {
+      "tenant_id": "acct_016",
+      "metric_date": "2026-06-14",
+      "anomaly_type": "payment_failure",
+      "anomaly_score": 0.982,
+      "type_confidence": 0.71,
+      "top_contributors": [
+        [
+          "refund_rate",
+          9.8
+        ],
+        [
+          "mrr",
+          -3.2
+        ]
+      ],
+      "metrics": {
+        "mrr": 41200.0,
+        "refund_rate": 0.16,
+        "conversion_rate": 0.29,
+        "checkout_volume": 880.0
+      },
+      "explanation": "A payment_failure anomaly was detected (score 0.982), driven primarily by a sharp spike in refund_rate (+9.80sd, now at 0.16) alongside an MRR dip (-3.20sd, now $41,200). Per the payment failure playbook, this combination typically signals card declines or a failing payment provider, driving involuntary churn as renewals fail. Recommend checking Stripe webhook delivery and the dunning queue to confirm the root cause.",
+      "faithfulness": 1.0,
+      "sources": [
+        "past_anomaly_price_change",
+        "past_anomaly_deploy_outage",
+        "runbook_payment_failure"
+      ],
+      "status": "ready"
+    },
+    {
+      "tenant_id": "acct_042",
+      "metric_date": "2026-06-15",
+      "anomaly_type": "churn_spike",
+      "anomaly_score": 0.958,
+      "type_confidence": 0.68,
+      "top_contributors": [
+        [
+          "mrr",
+          -6.1
+        ],
+        [
+          "conversion_rate",
+          -0.9
+        ]
+      ],
+      "metrics": {
+        "mrr": 28800.0,
+        "refund_rate": 0.03,
+        "conversion_rate": 0.31,
+        "checkout_volume": 640.0
+      },
+      "explanation": "The churn_spike label carries only 0.68 confidence, and the retrieved context offers a more likely explanation: a pricing change went live this morning, which per the pricing_effect note softens conversion (consistent with the conversion_rate driver at -0.90sd) as average deal size shifts. Additionally, the 14:02 deploy caused checkout 500 errors that dropped volume ~90% for ~40 minutes\u2014an infrastructure_issue that can distort the MRR driver (-6.10sd) rather than reflect genuine voluntary churn. I'd recommend confirming whether cancelled subscriptions actually rose before treating this as churn, since both recent events point to pricing and infra effects instead.",
+      "faithfulness": 1.0,
+      "sources": [
+        "past_anomaly_price_change",
+        "past_anomaly_deploy_outage",
+        "runbook_churn_spike"
+      ],
+      "status": "ready"
+    },
+    {
+      "tenant_id": "acct_007",
+      "metric_date": "2026-06-15",
+      "anomaly_type": "infrastructure_issue",
+      "anomaly_score": 0.991,
+      "type_confidence": 0.63,
+      "top_contributors": [
+        [
+          "checkout_volume",
+          -7.4
+        ],
+        [
+          "conversion_rate",
+          -2.1
+        ]
+      ],
+      "metrics": {
+        "mrr": 33500.0,
+        "refund_rate": 0.02,
+        "conversion_rate": 0.11,
+        "checkout_volume": 40.0
+      },
+      "explanation": "A near-total collapse in checkout volume (\u22127.40sd, dropping to 40) alongside a softer conversion rate (\u22122.10sd, at 0.11) most likely reflects an infrastructure issue rather than a demand problem. This pattern matches the retrieved incident where a bad deploy caused checkout 500 errors and a sharp volume drop before rollback. I'd recommend checking recent deploys, the status page, and API error rates to confirm, per the infrastructure incident playbook.",
+      "faithfulness": 1.0,
+      "sources": [
+        "past_anomaly_deploy_outage",
+        "past_anomaly_price_change",
+        "runbook_infra_issue"
+      ],
+      "status": "ready"
+    },
+    {
+      "tenant_id": "acct_023",
+      "metric_date": "2026-06-13",
+      "anomaly_type": "seasonal_dip",
+      "anomaly_score": 0.903,
+      "type_confidence": 0.55,
+      "top_contributors": [
+        [
+          "checkout_volume",
+          -2.8
+        ]
+      ],
+      "metrics": {
+        "mrr": 19100.0,
+        "refund_rate": 0.02,
+        "conversion_rate": 0.3,
+        "checkout_volume": 310.0
+      },
+      "explanation": "The model labeled this a seasonal dip (low confidence, 0.55), but the pattern is more consistent with an infrastructure issue: checkout_volume is the sole driver at -2.80sd (310), while conversion_rate (0.30), refund_rate (0.02), and MRR ($19,100) show no accompanying deterioration. Per the retrieved context, a deploy at 14:02 caused checkout 500 errors and dropped checkout volume over 90% for ~40 minutes before rollback\u2014matching the incident playbook's signature of an outage rather than a demand or seasonal problem. I'd verify the deploy/rollback timeline and API error rates before treating this as a genuine seasonal decline.",
+      "faithfulness": 1.0,
+      "sources": [
+        "past_anomaly_deploy_outage",
+        "past_anomaly_price_change",
+        "runbook_infra_issue"
+      ],
+      "status": "held_for_review"
+    }
+  ]
+}
