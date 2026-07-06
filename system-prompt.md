@@ -214,7 +214,16 @@ M3 LangGraph Agent:     [~] Graph built (agent/) — 6-node LangGraph
                             3x can beat relevance; hashing embedder stands in for
                             bge-small; LLM-judge faithfulness needs a key (not in
                             CI). Remaining: LangSmith tracing, LlamaIndex ingestion.
-M4 Backend + Auth:      [ ] Not started
+M4 Backend + Auth:      [~] FastAPI service (services/api) + Postgres:
+                            tenants/kpi_daily/anomaly_log schema, seeded with the
+                            REAL Claude anomaly bundle + realistic KPI history.
+                            Endpoints /anomalies /kpis /tenants /health, CORS.
+                            Frontend wired to fetch live (static bundle fallback)
+                            — verified E2E: Postgres→FastAPI→dashboard "live from
+                            API" (screenshot). 3 API tests vs real Postgres, ruff+
+                            mypy clean, docker + compose + CI (pg service) added.
+                            Remaining: live Stripe→KPI→detection worker (needs
+                            test key), OAuth2/JWT, gRPC, Redis, KEDA/Prometheus.
 M5 Frontend:            [~] Next.js 15 dashboard (frontend/) — anomaly timeline
                             with real Claude explanations, stat tiles, per-anomaly
                             drivers + faithfulness + status badges (ready / held

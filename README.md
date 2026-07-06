@@ -16,8 +16,8 @@ See [`build-plan.md`](build-plan.md) for the full architecture and milestones.
 | **M1 — Data Pipeline** | 🟡 Bronze ingest, dbt KPIs, GE gates, Airflow, Prometheus — all tested |
 | **M2 — ML Models** | 🟢 Detection + classification benchmarked; wired gold KPIs → detect → describe → classify |
 | **M3 — LangGraph Agent** | 🟡 6-node graph, freshness-aware RAG, faithfulness gate, Slack alert — tested |
-| M4 — Backend + Auth | ⚪ Not started |
-| **M5 — Frontend** | 🟡 Next.js 15 dashboard: anomaly timeline + real Claude explanations |
+| **M4 — Backend** | 🟡 FastAPI + Postgres serving anomalies + KPI history; dashboard wired live |
+| **M5 — Frontend** | 🟡 Next.js 15 dashboard: live from API (static bundle fallback) |
 | M6 — Beta + Benchmarks | ⚪ Not started |
 
 ## Repository layout
@@ -26,7 +26,8 @@ See [`build-plan.md`](build-plan.md) for the full architecture and milestones.
 .
 ├── docker-compose.yml        # local stack: Kafka, Postgres, Redis, ingestion
 ├── services/
-│   └── ingestion/            # FastAPI: Stripe webhook → Kafka (per-tenant topics)
+│   ├── ingestion/            # FastAPI: Stripe webhook → Kafka (per-tenant topics)
+│   └── api/                  # FastAPI + Postgres: serves anomalies + KPIs to the dashboard
 ├── pipelines/
 │   ├── streaming/            # Spark Structured Streaming: Kafka → Iceberg bronze
 │   ├── dbt/foresight/        # dbt: bronze → silver → gold KPI models (DuckDB/Databricks)

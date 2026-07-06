@@ -86,5 +86,18 @@ services:
       kafka:
         condition: service_healthy
 
+  api:
+    build:
+      context: ./services/api
+    container_name: foresight-api
+    ports:
+      - "8001:8001"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-foresight}:${POSTGRES_PASSWORD:-foresight}@postgres:5432/${POSTGRES_DB:-foresight}
+      FRONTEND_ORIGINS: ${FRONTEND_ORIGINS:-http://localhost:3000}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   pgdata:
