@@ -187,7 +187,11 @@ M2 ML Models:           [~] Detection done — LSTM-AE + IsolationForest ensembl
                             is uniquely good at contextual anomalies (57% recall vs
                             ≤24% baselines), but absolute precision ~0.35 — the
                             "91% precision/87% recall" resume numbers are NOT
-                            supported by measurement and need revising.
+                            supported by measurement and need revising. REAL-DATA
+                            benchmark added (NAB realKnownCause, 6 real streams):
+                            IsolationForest beats the ensemble (F1 0.32 vs 0.28) —
+                            consistent with synthetic (LSTM only helps on contextual
+                            anomalies). Recommend shipping IsolationForest as core.
                             Classification done — LoRA T5-small vs TF-IDF baseline,
                             template-holdout eval. HONEST RESULT: TF-IDF matches/
                             beats T5 (acc 0.835 vs 0.747, macro-F1 tied) — task is

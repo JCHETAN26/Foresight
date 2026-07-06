@@ -54,6 +54,37 @@ down by anomaly regime. Regenerate with `python -m foresight_detection.train`.
   measurement and should not be used on a résumé. The honest, defensible claim
   is the per-regime one above.
 
+## Real-data benchmark: NAB
+
+The synthetic benchmark above controls the anomaly regimes; this one uses real
+data. **NAB** (Numenta Anomaly Benchmark) `realKnownCause` streams — NYC taxi
+demand, machine temperature, CPU/EC2 metrics — with documented anomaly windows.
+Point-wise precision/recall/F1 (F1-optimal threshold) + PR-AUC, averaged over 6
+streams. Measured, not asserted:
+
+| Method | Precision | Recall | F1 | PR-AUC |
+|---|---|---|---|---|
+| **IsolationForest** | 0.251 | 0.654 | **0.324** | **0.292** |
+| Ensemble (LSTM+IForest) | 0.210 | 0.680 | 0.278 | 0.232 |
+| ARIMA residual | 0.135 | 0.866 | 0.221 | 0.128 |
+| Seasonal z-score | 0.129 | 0.601 | 0.189 | 0.114 |
+
+### What the real numbers say
+
+- **On real NAB data, plain IsolationForest beats the LSTM ensemble** (F1 0.32 vs
+  0.28, PR-AUC 0.29 vs 0.23). This is *consistent* with the synthetic finding:
+  the LSTM earns its place only on sustained/contextual anomalies, and NAB's
+  `realKnownCause` anomalies are mostly point/collective spikes on univariate
+  streams — IsolationForest's home turf. The honest conclusion holds across both
+  datasets: **ship IsolationForest as the core; the LSTM is a contextual-anomaly
+  specialist, not a universal win.**
+- **Absolute numbers are low (F1 ~0.3)** because this is strict *point-wise*
+  scoring against sparse anomaly windows — deliberately conservative, and **not**
+  NAB's own lenient application-profile score. PR-AUC is the fair comparison.
+
+Regenerate: `python -m foresight_detection.nab_benchmark --epochs 20`
+(downloads NAB into `outputs/nab/`, writes `outputs/nab_benchmark.csv`).
+
 ## Run it
 
 ```bash

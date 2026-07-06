@@ -42,8 +42,9 @@ def main(argv: list[str] | None = None) -> int:
 
     os.environ.setdefault("WANDB_MODE", "offline")
     os.environ.setdefault("WANDB_SILENT", "true")
-    import optuna
-    import wandb
+    # Imported here (after WANDB_MODE is set) rather than at module top.
+    import optuna  # noqa: I001, E402
+    import wandb  # noqa: E402
 
     df = generate(DatasetConfig())
     tune_df, holdout_df = _split_by_tenant(df)
