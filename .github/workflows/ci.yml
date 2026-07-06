@@ -235,6 +235,46 @@ jobs:
       - name: Test (pytest — stub generator, no API key)
         run: pytest -q
 
+  api:
+    name: API — lint, type, test
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: foresight
+          POSTGRES_PASSWORD: foresight
+          POSTGRES_DB: foresight
+        ports:
+          - "5432:5432"
+        options: >-
+          --health-cmd "pg_isready -U foresight"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    defaults:
+      run:
+        working-directory: services/api
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: Type check (mypy)
+        run: mypy app
+
+      - name: Test (pytest)
+        run: pytest -q
+        env:
+          DATABASE_URL: postgresql://foresight:foresight@localhost:5432/foresight
+
   frontend:
     name: Frontend — build & test
     runs-on: ubuntu-latest
@@ -267,3 +307,6 @@ jobs:
 
       - name: Build ingestion image
         run: docker build -t foresight-ingestion:ci services/ingestion
+
+      - name: Build API image
+        run: docker build -t foresight-api:ci services/api

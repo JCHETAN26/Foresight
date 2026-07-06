@@ -1,13 +1,10 @@
-import { AnomalyCard } from "@/components/AnomalyCard";
-import { StatTiles } from "@/components/StatTiles";
+import { Dashboard } from "@/components/Dashboard";
 import type { DemoBundle } from "@/lib/types";
 import bundle from "@/public/demo-data.json";
 
 const data = bundle as unknown as DemoBundle;
 
 export default function Home() {
-  const anomalies = [...data.anomalies].sort((a, b) => b.anomaly_score - a.anomaly_score);
-
   return (
     <main className="page">
       <header className="masthead">
@@ -22,19 +19,11 @@ export default function Home() {
         </p>
       </header>
 
-      <StatTiles anomalies={data.anomalies} />
-
-      <section className="timeline">
-        <div className="timeline__head">
-          <h2>Anomaly timeline</h2>
-          <span className="timeline__note">
-            explanations generated with {data.generated_with}
-          </span>
-        </div>
-        {anomalies.map((a) => (
-          <AnomalyCard key={`${a.tenant_id}-${a.metric_date}-${a.anomaly_type}`} anomaly={a} />
-        ))}
-      </section>
+      <Dashboard
+        initial={data.anomalies}
+        apiUrl={process.env.NEXT_PUBLIC_API_URL}
+        generatedWith={data.generated_with}
+      />
 
       <footer className="footer">
         Detection: LSTM-AE + IsolationForest ensemble · Classification: TF-IDF /
