@@ -1,0 +1,34 @@
+[project]
+name = "foresight-kpi-stream"
+version = "0.1.0"
+description = "Foresight KPI stream — Stripe events (Kafka) → per-day KPIs (Postgres)"
+requires-python = ">=3.11"
+dependencies = [
+    "aiokafka>=0.11",
+    "psycopg[binary]>=3.2",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2",
+    "ruff>=0.5",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["foresight_kpi"]

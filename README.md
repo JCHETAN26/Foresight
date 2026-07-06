@@ -27,6 +27,8 @@ See [`build-plan.md`](build-plan.md) for the full architecture and milestones.
 ├── docker-compose.yml        # local stack: Kafka, Postgres, Redis, ingestion
 ├── services/
 │   ├── ingestion/            # FastAPI: Stripe webhook → Kafka (per-tenant topics)
+│   ├── kpi_stream/           # Kafka Stripe events → per-day KPIs (Postgres); dbt-cross-validated
+│   ├── worker/               # KPI history → detection + agent → anomaly_log
 │   └── api/                  # FastAPI + Postgres: serves anomalies + KPIs to the dashboard
 ├── pipelines/
 │   ├── streaming/            # Spark Structured Streaming: Kafka → Iceberg bronze
