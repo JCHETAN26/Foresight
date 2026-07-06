@@ -232,8 +232,13 @@ M4 Backend + Auth:      [~] FastAPI service (services/api) + Postgres:
                             detection nailed all 4 true anomaly days, but classifier
                             mislabels type + holds most for review (metrics under-
                             determine type — the M2 finding in prod; safeguard works).
-                            Remaining: live Stripe→KPI ingest (needs test key),
-                            OAuth2/JWT, gRPC, Redis, KEDA/Prometheus.
+                            KPI STREAM built (services/kpi_stream): Kafka Stripe
+                            events → per-day KPIs → kpi_daily. KPI math is a pure
+                            function CROSS-VALIDATED against the dbt gold assertions
+                            (mrr 150/200/150, refund 0.4, conversion .667/.5/1.0) —
+                            streaming + batch can't drift. Ready for real Stripe
+                            (needs test key + stripe listen). Remaining: OAuth2/JWT,
+                            gRPC, Redis, KEDA/Prometheus, real Stripe run.
 M5 Frontend:            [~] Next.js 15 dashboard (frontend/) — anomaly timeline
                             with real Claude explanations, stat tiles, per-anomaly
                             drivers + faithfulness + status badges (ready / held

@@ -99,5 +99,18 @@ services:
       postgres:
         condition: service_healthy
 
+  kpi-stream:
+    build:
+      context: ./services/kpi_stream
+    container_name: foresight-kpi-stream
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      DATABASE_URL: postgresql://${POSTGRES_USER:-foresight}:${POSTGRES_PASSWORD:-foresight}@postgres:5432/${POSTGRES_DB:-foresight}
+    depends_on:
+      kafka:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+
 volumes:
   pgdata:

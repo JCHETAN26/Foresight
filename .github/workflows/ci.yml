@@ -235,6 +235,29 @@ jobs:
       - name: Test (pytest — stub generator, no API key)
         run: pytest -q
 
+  kpi-stream:
+    name: KPI stream — cross-validate vs dbt gold
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/kpi_stream
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: Test (pytest — KPI math vs dbt gold)
+        run: pytest -q
+
   worker:
     name: Worker — feature transform
     runs-on: ubuntu-latest
@@ -333,3 +356,6 @@ jobs:
 
       - name: Build API image
         run: docker build -t foresight-api:ci services/api
+
+      - name: Build KPI-stream image
+        run: docker build -t foresight-kpi-stream:ci services/kpi_stream
