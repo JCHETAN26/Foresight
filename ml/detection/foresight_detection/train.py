@@ -43,6 +43,7 @@ def main(argv: list[str] | None = None) -> int:
     os.environ.setdefault("WANDB_MODE", "offline")
     os.environ.setdefault("WANDB_SILENT", "true")
     import optuna
+
     import wandb
 
     df = generate(DatasetConfig())
