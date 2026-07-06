@@ -222,8 +222,14 @@ M4 Backend + Auth:      [~] FastAPI service (services/api) + Postgres:
                             — verified E2E: Postgres→FastAPI→dashboard "live from
                             API" (screenshot). 3 API tests vs real Postgres, ruff+
                             mypy clean, docker + compose + CI (pg service) added.
-                            Remaining: live Stripe→KPI→detection worker (needs
-                            test key), OAuth2/JWT, gRPC, Redis, KEDA/Prometheus.
+                            Detection WORKER (services/worker) built + run live:
+                            reads kpi_daily → real detection+classification+agent
+                            (real Claude) → writes anomaly_log. HONEST live result:
+                            detection nailed all 4 true anomaly days, but classifier
+                            mislabels type + holds most for review (metrics under-
+                            determine type — the M2 finding in prod; safeguard works).
+                            Remaining: live Stripe→KPI ingest (needs test key),
+                            OAuth2/JWT, gRPC, Redis, KEDA/Prometheus.
 M5 Frontend:            [~] Next.js 15 dashboard (frontend/) — anomaly timeline
                             with real Claude explanations, stat tiles, per-anomaly
                             drivers + faithfulness + status badges (ready / held
