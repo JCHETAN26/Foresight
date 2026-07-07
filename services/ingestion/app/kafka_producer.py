@@ -22,21 +22,24 @@ log = get_logger(__name__)
 class KafkaEventProducer:
     """Thin async wrapper around AIOKafkaProducer with JSON serialization."""
 
-    def __init__(self, bootstrap_servers: str) -> None:
-        self._bootstrap_servers = bootstrap_servers
+    def __init__(self, conn_kwargs: dict[str, Any]) -> None:
+        self._conn_kwargs = conn_kwargs
         self._producer: AIOKafkaProducer | None = None
 
     async def start(self) -> None:
         if self._producer is not None:
             return
         self._producer = AIOKafkaProducer(
-            bootstrap_servers=self._bootstrap_servers,
+            **self._conn_kwargs,
             enable_idempotence=True,  # exactly-once producing within a session
             acks="all",
             linger_ms=5,
         )
         await self._producer.start()
-        log.info("kafka_producer_started", bootstrap_servers=self._bootstrap_servers)
+        log.info(
+            "kafka_producer_started",
+            bootstrap_servers=self._conn_kwargs.get("bootstrap_servers"),
+        )
 
     async def stop(self) -> None:
         if self._producer is None:
@@ -63,4 +66,4 @@ class KafkaEventProducer:
         log.info("event_published", topic=topic, key=key, event_id=value.get("id"))
 
 
-producer = KafkaEventProducer(settings.kafka_bootstrap_servers)
+producer = KafkaEventProducer(settings.kafka_conn_kwargs())
