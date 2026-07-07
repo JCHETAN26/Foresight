@@ -41,6 +41,7 @@ See [`build-plan.md`](build-plan.md) for the full architecture and milestones.
 │   └── anomaly/             # integration: gold KPIs → detect → describe → classify
 ├── agent/                   # LangGraph: detect→classify→retrieve→reason→evaluate→alert
 ├── frontend/                # Next.js 15 dashboard: anomaly timeline + AI explanations
+├── monitoring/               # Prometheus scrape config + provisioned Grafana dashboard
 ├── infra/terraform/          # Azure IaC: Event Hubs, Databricks, ADLS, AKS, OpenAI
 └── .github/workflows/ci.yml  # lint · type-check · test · terraform validate · docker build
 ```

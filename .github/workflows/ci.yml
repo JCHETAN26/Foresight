@@ -296,6 +296,13 @@ jobs:
         options: >-
           --health-cmd "pg_isready -U foresight"
           --health-interval 5s --health-timeout 5s --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - "6379:6379"
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s --health-timeout 5s --health-retries 10
     defaults:
       run:
         working-directory: services/api
@@ -320,6 +327,7 @@ jobs:
         run: pytest -q
         env:
           DATABASE_URL: postgresql://foresight:foresight@localhost:5432/foresight
+          REDIS_URL: redis://localhost:6379/0
 
   frontend:
     name: Frontend — build & test

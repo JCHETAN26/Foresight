@@ -13,6 +13,11 @@ class Settings(BaseSettings):
     frontend_origins: str = "http://localhost:3000"
     log_level: str = "INFO"
 
+    # Redis (optional): rate limiting + response cache. Disabled if unset.
+    redis_url: str = ""
+    rate_limit_per_min: int = 100
+    cache_ttl_seconds: int = 60
+
     @property
     def cors_origins(self) -> list[str]:
         return [o.strip() for o in self.frontend_origins.split(",") if o.strip()]
