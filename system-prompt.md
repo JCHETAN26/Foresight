@@ -237,8 +237,14 @@ M4 Backend + Auth:      [~] FastAPI service (services/api) + Postgres:
                             function CROSS-VALIDATED against the dbt gold assertions
                             (mrr 150/200/150, refund 0.4, conversion .667/.5/1.0) —
                             streaming + batch can't drift. Ready for real Stripe
-                            (needs test key + stripe listen). Remaining: OAuth2/JWT,
-                            gRPC, Redis, KEDA/Prometheus, real Stripe run.
+                            (needs test key + stripe listen). OBSERVABILITY built:
+                            Prometheus metrics on the API (request rate, p50/95/99
+                            latency by route TEMPLATE, errors, cache, rate-limit) +
+                            Redis rate limiting (429) + response cache, Prometheus
+                            scrape config + provisioned Grafana dashboard, compose
+                            services. Tested vs real Postgres+Redis; live /metrics
+                            verified (caught + fixed a route-cardinality bug).
+                            Remaining: OAuth2/JWT, gRPC, real Stripe run.
 M5 Frontend:            [~] Next.js 15 dashboard (frontend/) — anomaly timeline
                             with real Claude explanations, stat tiles, per-anomaly
                             drivers + faithfulness + status badges (ready / held
