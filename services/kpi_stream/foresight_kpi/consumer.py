@@ -48,7 +48,7 @@ def _flush(tenant_events: dict[str, list[dict]], dsn: str) -> int:
 
 async def run() -> None:
     consumer = AIOKafkaConsumer(
-        bootstrap_servers=settings.kafka_bootstrap_servers,
+        **settings.kafka_conn_kwargs(),
         group_id="kpi-stream",
         auto_offset_reset="earliest",
     )
