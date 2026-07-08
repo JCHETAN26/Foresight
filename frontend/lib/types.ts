@@ -22,3 +22,11 @@ export interface DemoBundle {
   generated_with: string;
   anomalies: Anomaly[];
 }
+
+export interface KpiPoint {
+  metric_date: string;
+  mrr: number;
+  conversion_rate: number;
+  refund_rate: number;
+  checkout_volume: number;
+}
